@@ -3,7 +3,7 @@ import { FormThemeVariants, IconThemeVariants } from '../variants/theme.variant'
 import { useDispatch, useSelector } from 'react-redux'
 import { ForwardRefComponent, HTMLMotionProps, motion } from 'framer-motion'
 import styled, { StyledComponentBase } from 'styled-components'
-import { SearchUsers } from '../../redux/actions/searchUsers';
+import { SearchUsers, setQuery } from '../../redux/actions/searchUsers';
 import { ResetUsersData } from '../../redux/actions/resetUsersData';
 
 const FormContainer: StyledComponentBase<ForwardRefComponent<HTMLFormElement, HTMLMotionProps<"form">>, any, {}, never> = styled(motion.form)`
@@ -53,6 +53,7 @@ export const SearchForm = () => {
         let searchInput: HTMLInputElement | null = document.querySelector('.search_input');
         if (searchInput && searchInput.value) {
             dispatch(ResetUsersData())
+            dispatch(setQuery(searchInput.value))
             dispatch(SearchUsers(searchInput.value, 1))
         }
     }

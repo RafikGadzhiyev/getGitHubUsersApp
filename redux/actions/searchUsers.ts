@@ -6,10 +6,20 @@ export const SearchUsers = (query: string, currentPage: number) => {
         dispatch({
             type: "SET_FOUND_USERS",
             payload: {
+                current_page: currentPage,
                 totalFoundUsers: result.items,
                 totalFoundUsersLength: result.total_count
             }
         })
 
+    }
+}
+
+export const setQuery = (query: string) => {
+    return {
+        type: "SET_QUERY",
+        payload: {
+            query
+        }
     }
 }

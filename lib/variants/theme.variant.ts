@@ -1,5 +1,26 @@
 import { Variants } from "framer-motion";
 
+export const ListElementThemeVariants: Variants = {
+    "dark": {
+        backgroundColor: '#1074F4',
+        borderColor: '#1074F4'
+    },
+    "light": {
+        backgroundColor: '#107AFE',
+        borderColor: '#107AFE',
+        color: "#fff"
+    }
+}
+
+export const ListButtonThemeVariants: Variants = {
+    "dark": {
+        borderColor: '#1074F4'
+    },
+    "light": {
+        borderColor: '#107AFE',
+    }
+}
+
 export const ContainerThemeVariants: Variants = {
     'dark': {
         backgroundColor: "#141D2E",

@@ -6,10 +6,13 @@ import { PaginationData } from '../interfaces/PaginationData.interface';
 import { ContainerThemeVariants, FormThemeVariants } from '../variants/theme.variant';
 import { SetCurrentUser } from '../../redux/actions/SetCurrentUser';
 import GetCurrentUserData from '../../redux/actions/GetCurrentUserData';
+import { Pagination } from './Pagination';
+import { ResetUserData, ResetUsersData } from '../../redux/actions/resetUsersData';
 
 const ResultMainContainer: StyledComponentBase<ForwardRefComponent<HTMLDivElement, HTMLMotionProps<"div">>, any, {}, never> = styled(motion.div)`
     margin-top: 20px;
     padding: 20px;
+    border-radius: 5px;
     height: 750px;
     overflow-y: auto;
 `;
@@ -133,15 +136,15 @@ export const ResultContiner = () => {
     const dispatch: Dispatch<any> = useDispatch();
     const [paginationData, setPaginationData] = useState<PaginationData>({
         totalPages: 0,
-        currentPage: 1
+        currentPage: store.current_page || 1
     });
 
     useEffect(() => {
-        let total = Math.ceil(store.totalFoundUsersLength / 50);
+        let total = Math.ceil(store.totalFoundUsersLength > 1000 ? 1000 / 50 : store.totalFoundUsersLength / 50);
         if (total) {
-            setPaginationData(prev => ({ ...prev, totalPages: total }))
+            setPaginationData(() => ({ totalPages: total, currentPage: store.current_page || 1 }))
         }
-    }, [store.totalFoundUsersLength])
+    }, [store.totalFoundUsersLength, store.current_page])
 
     const getUserData = (login: string) => {
         dispatch(SetCurrentUser(login));
@@ -171,14 +174,20 @@ export const ResultContiner = () => {
                 <TotalUsersText>
                     Total users found: {store.totalFoundUsersLength}
                 </TotalUsersText>
-                <ul>
+                <Pagination
+                    total={paginationData.totalPages}
+                    current={paginationData.currentPage}
+                    per_page={50}
+                    total_users={store.totalFoundUsersLength}
+                />
+                {/* <ul>
                     {
                         [paginationData.currentPage, paginationData.currentPage + 1, paginationData.currentPage + 2].map((e: any, i: number) => <li key={Math.random() * i}>{e}</li>)
 
                     }
                     <li>...</li>
                     <li>{paginationData.totalPages}</li>
-                </ul>
+                </ul> */}
                 <UsersList>
                     {
                         store.totalFoundUsers.map((e: any, i: number) => <User key={Math.random() * (i + (100 << (i + 1)))}>
@@ -211,6 +220,9 @@ export const ResultContiner = () => {
         {
             !store.isLoading && store.totalFoundUsersLength && store.current_user && store.current_user_data &&
             <CurrentUserInfoContainer>
+                <button
+                    onClick={() => dispatch(ResetUserData())}
+                >Back</button>
                 <CurrentUserImageContainer>
                     <CurrentUserImage src={store.current_user_data.avatar_url} alt="" />
                 </CurrentUserImageContainer>

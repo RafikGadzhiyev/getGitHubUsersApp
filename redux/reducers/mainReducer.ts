@@ -25,6 +25,7 @@ export default function MainReducer(state: any, action: ActionInterface) {
             if (action.payload) {
                 return {
                     ...state,
+                    current_page: action.payload.current_page,
                     totalFoundUsers: action.payload.totalFoundUsers,
                     totalFoundUsersLength: action.payload.totalFoundUsersLength,
                     isLoading: false
@@ -32,6 +33,14 @@ export default function MainReducer(state: any, action: ActionInterface) {
             }
             return state;
         }
+        case "SET_QUERY":
+            if (action.payload) {
+                return {
+                    ...state,
+                    query: action.payload.query
+                }
+            }
+            return state;
         case "RESET_USERS_DATA":
             return {
                 ...state,
@@ -40,7 +49,11 @@ export default function MainReducer(state: any, action: ActionInterface) {
                 totalFoundUsersLength: 0,
                 isLoading: true
             }
-
+        case "RESET_USER_DATA":
+            return {
+                ...state,
+                current_user: null
+            }
         case "SET_CURRENT_USER":
             if (action.payload) {
                 return {
